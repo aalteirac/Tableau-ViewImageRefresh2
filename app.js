@@ -399,10 +399,13 @@ function getViews(protocol,port,token,host,siteid,projectID,pageNumber,viewName)
             var res = parsedXml.tsResponse.views[0].view;
             if(res)
               res.map((v)=>{
-                if(projectID && v.$ && v.project[0].$.id==projectID){
+                if(projectID && v.$ && v.project && v.project[0].$.id==projectID){
                   if(viewName && v.$.name==viewName)
                   vs.push({"id":v.$.id,"wid":v.workbook[0].$.id,"name":v.$.name,"url":v.$.contentUrl});
                 }
+		  else{
+			console.log("error",v)		  
+		      }
               })
             resolve ({views:vs,retrieved:res.length,total:parsedXml.tsResponse.pagination?parsedXml.tsResponse.pagination[0].$.totalAvailable:0});
           }
