@@ -43,6 +43,7 @@ app.get('/list', async function (req, res) {
   if(!viewName)
     return res.send("Missing 'view' parameter !!");
     return list(req.get('host'),'@@@Tableau Host@@@','@@@Site Name@@@',project,'@@@PAT Name@@@','@@@PAT Secret@@@',res,viewName);
+    
 });
 app.post('/list', async function (req, res) {
   var m=validateParam(req,true);
@@ -232,9 +233,11 @@ function dumpViewPics(protocol,port,token,host,site,project,viewName){
     if(vs)
       while (retrieved<vs.total){
         var temp= await getViews(protocol,port,token,host,site,pid,pageNumber,viewName);
-        retrieved+=temp.retrieved;
-        allViews=allViews.concat(temp.views);
-        pageNumber=pageNumber+1;
+        if(temp){
+          retrieved+=temp.retrieved;
+          allViews=allViews.concat(temp.views);
+          pageNumber=pageNumber+1;
+        }
       }
     views=allViews;
     var existing=[];
